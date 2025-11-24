@@ -3,15 +3,18 @@ import SwiftUI
 @MainActor
 @Observable
 final class SongViewModel {
-    private var _songs: [Song] = []
-    var songs: [Song] {
-        return _songs
+    private let repository: SongRepository
+    
+    init(repository: SongRepository = SupabaseSongRepository()) {
+        self.repository = repository
     }
     
+    private var _songs: [Song] = []
+    var songs: [Song] { _songs }
+    
+    var path = NavigationPath()
+    
     func loadSongs() async {
-        let requestURL = URL(string: SongApiConfig.serverURL)!
-        let (data, _) = try! await URLSession.shared.data(from: requestURL)
-        let decoder = JSONDecoder()
-        _songs = try! decoder.decode([Song].self, from: data)
+        _songs = try! await repository.fetchSongs()
     }
 }
