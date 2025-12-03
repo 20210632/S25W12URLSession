@@ -297,7 +297,7 @@ struct GameAddView: View {
                             dismiss()
                         }
                     }
-                    .disabled(title.isEmpty || genre.isEmpty)
+                    .disabled(title.isEmpty || genre.isEmpty || platform.isEmpty)
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
